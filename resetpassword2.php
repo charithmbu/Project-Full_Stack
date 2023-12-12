@@ -1,7 +1,7 @@
 <?php
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Assume you have a database connection, replace with your actual database logic
-    $conn = new mysqli("your_database_host", "your_username", "your_password", "your_database_name");
+    $conn = new mysqli("127.0.0.1", "root", "", "userlogin");
 
     // Check connection
     if ($conn->connect_error) {
@@ -12,7 +12,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $email = $conn->real_escape_string($_POST['email']);
 
     // Check if the email exists in your database (replace with your actual query)
-    $sql = "SELECT * FROM users WHERE email = '$email'";
+    $sql = "SELECT * FROM user_data WHERE email = '$email'";
     $result = $conn->query($sql);
 
     if ($result->num_rows > 0) {
@@ -20,7 +20,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $token = bin2hex(random_bytes(32));
 
         // Store the token in your database for later verification (replace with your actual query)
-        $sql = "UPDATE users SET reset_token = '$token' WHERE email = '$email'";
+        $sql = "UPDATE user_data SET reset_token = '$token' WHERE email = '$email'";
         $conn->query($sql);
 
         // Send the reset link to the user's email
@@ -41,4 +41,3 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $conn->close();
 }
 ?>
-
